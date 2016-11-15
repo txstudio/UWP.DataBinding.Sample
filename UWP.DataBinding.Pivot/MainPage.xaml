@@ -1,0 +1,64 @@
+﻿<Page
+    x:Class="UWP.DataBinding.Pivot.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWP.DataBinding.Pivot"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
+    xmlns:data="using:UWP.DataBinding.Mobile"
+    
+    mc:Ignorable="d">
+    
+    <!--
+        這是一個使用 Pivot 控制項進行資料繫結的範例程式碼
+        並使用 ListView 呈現清單在 Pivot 的 Item 項目
+    
+        啟用 ListView 的點選功能，點選後會呈現選擇的行動裝置資訊在下方
+    -->
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          Padding="5">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Pivot Grid.Row="0" ItemsSource="{x:Bind _viewModel}">
+            
+            <Pivot.HeaderTemplate>
+                <DataTemplate x:DataType="data:BrandViewModel">
+                    <TextBlock Text="{x:Bind Name}"></TextBlock>
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            
+            <Pivot.ItemTemplate>
+                <DataTemplate x:DataType="data:BrandViewModel">
+                    <ListView ItemsSource="{x:Bind Devices}"
+                              IsItemClickEnabled="True"
+                              ItemClick="ListView_ItemClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:Device">
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="{x:Bind Name}" 
+                                               FontSize="24"></TextBlock>
+
+                                    <TextBlock Text="{x:Bind Price}" 
+                                               FontSize="20"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DataTemplate>
+            </Pivot.ItemTemplate>
+        </Pivot>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <TextBlock Text="點選的裝置" FontSize="26"></TextBlock>
+            <TextBlock Name="NameTextBlock" FontSize="22">NAME</TextBlock>
+            <TextBlock Name="PriceTextBlock">00000</TextBlock>
+        </StackPanel>
+        
+    </Grid>
+</Page>
